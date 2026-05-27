@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npm run build:font && npm run build:demo",
-    "build:font": "fantasticon --config fantasticonrc.cjs",
+    "build:font": "mkdir -p dist/fonts && fantasticon --config fantasticonrc.cjs",
     "build:demo": "node scripts/generate-demo-html.js"
   },
   "devDependencies": {
