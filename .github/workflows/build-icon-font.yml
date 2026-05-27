@@ -1,0 +1,40 @@
+# .github/workflows/build-icon-font.yml
+
+name: Build Icon Font
+
+on:
+  push:
+    paths:
+      - "icons/*.svg"
+      - "codepoints.json"
+  workflow_dispatch:
+
+jobs:
+  build-font:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Icon Font and Demo
+        run: npm run build
+
+      - name: Create ZIP archive
+        run: |
+          cd dist
+          zip -r icon-font.zip fonts demo.html
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: icon-font
+          path: dist/icon-font.zip

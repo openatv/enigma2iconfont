@@ -1,0 +1,13 @@
+{
+  "name": "icon-font-generator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:font && npm run build:demo",
+    "build:font": "fantasticon --config fantasticonrc.cjs",
+    "build:demo": "node scripts/generate-demo-html.js"
+  },
+  "devDependencies": {
+    "fantasticon": "^3.0.0"
+  }
+}
