@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build:font && npm run build:demo",
+    "build": "npm run clean && npm run build:font && npm run build:demo",
     "build:font": "mkdir -p dist/fonts && fantasticon --config fantasticonrc.cjs",
-    "build:demo": "node scripts/generate-demo-html.js"
+    "clean": "rm -rf dist/fonts dist/demo.html",
+    "build:demo": "node scripts/generate-demo-html.js",
+    "trim-svgs": "node scripts/trim-svgs.js",
+    "import-inbox": "node scripts/import-inbox.js"
   },
   "devDependencies": {
-    "fantasticon": "^3.0.0"
+    "fantasticon": "^3.0.0",
+    "svg-path-bbox": "^2.1.0"
   }
 }

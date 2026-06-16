@@ -6,6 +6,9 @@ const distDir = path.join(projectRoot, "dist");
 const codepointsPath = path.join(projectRoot, "codepoints.json");
 const outputPath = path.join(distDir, "demo.html");
 
+const FONT_NAME = "enigma2icons";
+const PREFIX = "ei";
+
 function toHexCodepoint(value) {
   return value.toString(16).toUpperCase().padStart(4, "0");
 }
@@ -19,13 +22,40 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+function buildInlineCss(codepoints) {
+  const iconClasses = Object.entries(codepoints)
+    .map(([name, value]) => `.${PREFIX}-${name}::before { content: "\\${value.toString(16)}"; }`)
+    .join("\n");
+
+  return `
+    @font-face {
+      font-family: "${FONT_NAME}";
+      src: url("./fonts/${FONT_NAME}.woff2") format("woff2"),
+           url("./fonts/${FONT_NAME}.woff") format("woff");
+      font-weight: normal;
+      font-style: normal;
+    }
+    [class^="${PREFIX}-"],
+    [class*=" ${PREFIX}-"] {
+      font-family: "${FONT_NAME}";
+      font-style: normal;
+      font-weight: normal;
+      speak: none;
+      display: inline-block;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    ${iconClasses}`;
+}
+
 function buildIconCards(codepoints) {
   const entries = Object.entries(codepoints)
     .map(([name, value]) => ({
       name,
       value,
       hex: toHexCodepoint(value),
-      className: `icon-${name}`
+      className: `${PREFIX}-${name}`
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -57,9 +87,10 @@ function buildHtml(codepoints) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>my-icons demo</title>
-  <link rel="stylesheet" href="./fonts/my-icons.css" />
+  <title>${FONT_NAME} demo</title>
   <style>
+    ${buildInlineCss(codepoints)}
+
     :root {
       --bg: #0b1220;
       --panel: #111a2e;
@@ -187,8 +218,8 @@ function buildHtml(codepoints) {
   <main class="wrap">
     <header>
       <div>
-        <h1>my-icons demo</h1>
-        <div class="meta">${iconCount} icons • generated ${generatedAt}</div>
+        <h1>${FONT_NAME} demo</h1>
+        <div class="meta">${iconCount} icons &bull; generated ${generatedAt}</div>
       </div>
       <div class="toolbar">
         <input id="filter" type="search" placeholder="Filter by name, class, unicode..." />
