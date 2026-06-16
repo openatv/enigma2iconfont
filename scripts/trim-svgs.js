@@ -54,10 +54,20 @@ function trimSvgFile(filePath) {
 
   const bboxes = paths.map((d) => svgPathBbox(d));
   const [minX, minY, maxX, maxY] = combineBboxes(bboxes);
-  const w = round4(maxX - minX);
-  const h = round4(maxY - minY);
-  const x = round4(minX);
-  const y = round4(minY);
+  let x = minX, y = minY, w = maxX - minX, h = maxY - minY;
+
+  // Square only extreme outliers, padding the shorter axis symmetrically.
+  // A bare ink bbox is fine for the normal (mildly asymmetric) case, but
+  // for an inherently thin shape (e.g. "remove"'s horizontal bar) it gives
+  // a wildly non-square viewBox; fantasticon's normalize then blows the
+  // glyph up far too wide, pushing it outside its cell.
+  const MAX_ASPECT_RATIO = 2;
+  if (Math.max(w / h, h / w) > MAX_ASPECT_RATIO) {
+    const diff = Math.abs(w - h);
+    if (w > h) { y -= diff / 2; h = w; } else { x -= diff / 2; w = h; }
+  }
+
+  x = round4(x); y = round4(y); w = round4(w); h = round4(h);
 
   const newViewBox = `${x} ${y} ${w} ${h}`;
 

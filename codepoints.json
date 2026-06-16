@@ -339,5 +339,6 @@
   "tv_guide": 59985,
   "smart_card_reader": 59986,
   "audio_video_receiver": 59987,
-  "tv_next": 59988
+  "tv_next": 59988,
+  "cancel_fill": 59989
 }
