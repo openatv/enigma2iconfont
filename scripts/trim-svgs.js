@@ -10,6 +10,17 @@ const path = require("path");
 const { svgPathBbox } = require("svg-path-bbox");
 
 const iconsDir = path.resolve(__dirname, "../icons");
+const notrimPath = path.resolve(__dirname, "../notrim.lst");
+
+function loadNotrim() {
+  if (!fs.existsSync(notrimPath)) return new Set();
+  return new Set(
+    fs.readFileSync(notrimPath, "utf8")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"))
+  );
+}
 
 function findSvgsRecursive(dir) {
   let results = [];
@@ -61,7 +72,7 @@ function trimSvgFile(filePath) {
   // for an inherently thin shape (e.g. "remove"'s horizontal bar) it gives
   // a wildly non-square viewBox; fantasticon's normalize then blows the
   // glyph up far too wide, pushing it outside its cell.
-  const MAX_ASPECT_RATIO = 2;
+  const MAX_ASPECT_RATIO = 1;
   if (Math.max(w / h, h / w) > MAX_ASPECT_RATIO) {
     const diff = Math.abs(w - h);
     if (w > h) { y -= diff / 2; h = w; } else { x -= diff / 2; w = h; }
@@ -88,13 +99,28 @@ function trimSvgFile(filePath) {
   return false;
 }
 
-module.exports = { trimSvgFile };
+module.exports = { trimSvgFile, loadNotrim };
 
 if (require.main === module) {
   const files = findSvgsRecursive(iconsDir);
+  const noTrim = loadNotrim();
   let changed = 0;
 
   for (const file of files) {
+    // notrim.lst uses the inbox-filename stem: "<category>_<iconname>"
+    // For fill icons the stored file is e.g. "google_fill/cancel_fill.svg";
+    // strip the trailing "_fill" from the basename so the key matches
+    // the inbox stem "google_fill_cancel" (not "google_fill_cancel_fill").
+    const dir = path.dirname(file);
+    const base = path.basename(file, ".svg");
+    const noTrimBase = dir.endsWith("_fill") && base.endsWith("_fill")
+      ? base.slice(0, -5) : base;
+    const key = `${dir}_${noTrimBase}`;
+    if (noTrim.has(key)) {
+      console.log(`[skip] ${file.padEnd(28)} (notrim.lst)`);
+      continue;
+    }
+
     const filePath = path.join(iconsDir, file);
     const content = fs.readFileSync(filePath, "utf8");
     const oldViewBoxMatch = content.match(/viewBox="([^"]*)"/);

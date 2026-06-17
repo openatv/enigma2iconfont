@@ -24,7 +24,7 @@
 const fs = require("fs");
 const path = require("path");
 const readline = require("node:readline/promises");
-const { trimSvgFile } = require("./trim-svgs");
+const { trimSvgFile, loadNotrim } = require("./trim-svgs");
 
 const root = path.resolve(__dirname, "..");
 const inboxDir = path.join(root, "inbox");
@@ -114,9 +114,10 @@ async function main() {
     console.log("inbox/ is empty — nothing to import.");
     return;
   }
-
+  const force = true;
   const codepoints = readCodepoints(fs.readFileSync(codepointsPath, "utf8"));
   const existingPaths = findExistingIconPaths();
+  const noTrim = loadNotrim();
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
   let imported = 0;
@@ -132,6 +133,8 @@ async function main() {
       continue;
     }
 
+    console.log(`[force]`);
+
     const { category, name } = parsed;
     const destDir = path.join(iconsDir, category);
     const destPath = path.join(destDir, `${name}.svg`);
@@ -141,13 +144,22 @@ async function main() {
     const isKnown = codepoints.has(name);
 
     let proceed;
-    if (priorPath) {
-      const rel = path.relative(root, priorPath);
-      const cpHex = codepoints.get(name).toString(16).toUpperCase();
-      proceed = await confirm(rl, `[exists]   ${rel} existiert bereits — mit ${file} überschreiben (Codepoint bleibt 0x${cpHex})?`, false);
-    } else {
-      const previewCp = nextCodepoint(codepoints, category);
-      proceed = await confirm(rl, `[import]   ${file} → icons/${category}/${name}.svg (neuer Codepoint 0x${previewCp.toString(16).toUpperCase()})?`, true);
+
+    console.log(`[force] ${force}`);
+
+    if (!force)
+    {
+      if (priorPath) {
+        const rel = path.relative(root, priorPath);
+        const cpHex = codepoints.get(name).toString(16).toUpperCase();
+        proceed = await confirm(rl, `[exists]   ${rel} existiert bereits — mit ${file} überschreiben (Codepoint bleibt 0x${cpHex})?`, false);
+      } else {
+        const previewCp = nextCodepoint(codepoints, category);
+        proceed = await confirm(rl, `[import]   ${file} → icons/${category}/${name}.svg (neuer Codepoint 0x${previewCp.toString(16).toUpperCase()})?`, true);
+      }
+    }
+    else{
+      proceed = true;
     }
 
     if (!proceed) {
@@ -156,9 +168,15 @@ async function main() {
       continue;
     }
 
+
     fs.mkdirSync(destDir, { recursive: true });
     fs.renameSync(srcPath, destPath);
-    trimSvgFile(destPath);
+    const inboxStem = path.basename(file, ".svg");
+    if (noTrim.has(inboxStem)) {
+      console.log(`[notrim]   ${file} — viewBox nicht angepasst (notrim.lst)`);
+    } else {
+      trimSvgFile(destPath);
+    }
 
     // If the icon previously lived in a different category folder, drop the
     // stale copy so fantasticon's getIconId (basename-based) never sees two

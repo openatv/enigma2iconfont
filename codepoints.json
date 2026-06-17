@@ -11,9 +11,6 @@
   "error": 59657,
   "info": 59658,
   "warning": 59659,
-  "error_fill": 59660,
-  "info_fill": 59661,
-  "warning_fill": 59662,
   "search": 59663,
   "home": 59664,
   "menu": 59665,
@@ -340,5 +337,8 @@
   "smart_card_reader": 59986,
   "audio_video_receiver": 59987,
   "tv_next": 59988,
-  "cancel_fill": 59989
+  "cancel_FILL": 59990,
+  "error_FILL": 59991,
+  "info_FILL": 59992,
+  "warning_FILL": 59993
 }
