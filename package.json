@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "npm run clean && npm run build:font && npm run build:demo",
-    "build:font": "mkdir -p dist/fonts && fantasticon --config fantasticonrc.cjs",
+    "build:font": "mkdir -p dist/fonts && fantasticon --config fantasticonrc.cjs && python3 scripts/fix-metrics.py",
     "clean": "rm -rf dist/fonts dist/demo.html",
     "build:demo": "node scripts/generate-demo-html.js",
     "trim-svgs": "node scripts/trim-svgs.js",
