@@ -364,5 +364,10 @@
   "delete_forever": 60011,
   "deployed_code": 60012,
   "host": 60013,
-  "storage": 60014
+  "storage": 60014,
+  "layers": 60015,
+  "terminal": 60016,
+  "keyboard_capslock": 60017,
+  "space_bar": 60018,
+  "keyboard_tab": 60019
 }
