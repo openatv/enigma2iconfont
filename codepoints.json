@@ -369,5 +369,12 @@
   "terminal": 60016,
   "keyboard_capslock": 60017,
   "space_bar": 60018,
-  "keyboard_tab": 60019
+  "keyboard_tab": 60019,
+  "link": 60020,
+  "link_off": 60021,
+  "signal_wifi_0_bar": 60022,
+  "signal_wifi_4_bar": 60023,
+  "signal_wifi_bad": 60024,
+  "signal_wifi_off": 60025,
+  "signal_wifi_statusbar_not_connected": 60026
 }
