@@ -376,5 +376,10 @@
   "signal_wifi_4_bar": 60023,
   "signal_wifi_bad": 60024,
   "signal_wifi_off": 60025,
-  "signal_wifi_statusbar_not_connected": 60026
+  "signal_wifi_statusbar_not_connected": 60026,
+  "dolby_broadcast": 60027,
+  "teletext": 60028,
+  "subtitles_broadcast": 60029,
+  "hbbtv_dots": 60030,
+  "hbbtv": 60031
 }
