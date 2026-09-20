@@ -381,5 +381,13 @@
   "teletext": 60028,
   "subtitles_broadcast": 60029,
   "hbbtv_dots": 60030,
-  "hbbtv": 60031
+  "hbbtv": 60031,
+  "file_code": 60032,
+  "progress_0": 60033,
+  "progress_25": 60034,
+  "progress_50": 60035,
+  "progress_75": 60036,
+  "progress_100": 60037,
+  "record": 60038,
+  "play_record": 60039
 }
