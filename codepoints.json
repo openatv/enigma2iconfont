@@ -250,6 +250,7 @@
   "snooze": 59900,
   "alarm_off": 59901,
   "wifi_device": 59902,
+  "wifi": 61697,
   "wifi_off": 59903,
   "wifi_add": 59904,
   "wifi_lock": 59905,
