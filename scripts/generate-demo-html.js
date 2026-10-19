@@ -4,7 +4,7 @@ const path = require("path");
 const projectRoot = path.resolve(__dirname, "..");
 const distDir = path.join(projectRoot, "dist");
 const codepointsPath = path.join(projectRoot, "codepoints.json");
-const outputPath = path.join(distDir, "demo.html");
+const outputPath = path.join(distDir, "index.html");
 
 const FONT_NAME = "enigma2icons";
 const PREFIX = "ei";

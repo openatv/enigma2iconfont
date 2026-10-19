@@ -391,5 +391,6 @@
   "progress_100": 60037,
   "record": 60038,
   "play_record": 60039,
-  "nest_clock_farsight_analog": 60040
+  "nest_clock_farsight_analog": 60040,
+  "volume_mute": 60041
 }
