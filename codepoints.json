@@ -250,7 +250,6 @@
   "snooze": 59900,
   "alarm_off": 59901,
   "wifi_device": 59902,
-  "wifi": 61697,
   "wifi_off": 59903,
   "wifi_add": 59904,
   "wifi_lock": 59905,
@@ -359,6 +358,7 @@
   "wifi_2_bar": 60007,
   "ethernet_cable": 61443,
   "ethernet_cable_off": 61444,
+  "wifi": 61697,
   "cloud": 60008,
   "cloud_lock": 60009,
   "delete": 60010,
@@ -390,5 +390,6 @@
   "progress_75": 60036,
   "progress_100": 60037,
   "record": 60038,
-  "play_record": 60039
+  "play_record": 60039,
+  "nest_clock_farsight_analog": 60040
 }
